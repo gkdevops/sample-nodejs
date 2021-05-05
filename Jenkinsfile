@@ -10,15 +10,16 @@ pipeline {
     triggers {
         GenericTrigger(
             genericVariables: [
-                [key: 'actor', value: '$.repository.owner.name']
+                [key: 'actor', value: '$.repository.owner.name'],
+                [key: 'branch', value: '$.ref']
             ],
-            
             token: 'sampleapp',
-            
             printContributedVariables: true,
             printPostContent: false,
-
             silentResponse: false,
+            regexpFilterText: '$branch',
+            regexpFilterExpression: 'refs/heads/' + BRANCH_NAME
+
         )
     }
     
