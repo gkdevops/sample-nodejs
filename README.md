@@ -4,7 +4,7 @@ These steps will get this sample Node.js application running for you using Digit
 
 **Note: Following these steps may result in charges for the use of DigitalOcean services**
 
-## Requirements
+## Requirement
 
 * You need a DigitalOcean account. If you don't already have one, you can sign up at https://cloud.digitalocean.com/registrations/new
     
