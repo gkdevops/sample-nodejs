@@ -6,6 +6,21 @@ pipeline {
         string defaultValue: 'main', description: 'This parameter will expect the branch name to be provided', name: 'BRANCH_NAME', trim: false
         choice choices: ['DEV', 'SIT', 'UAT', 'PROD'], description: '', name: 'ENVIRONMENT'
     }
+
+    triggers {
+        GenericTrigger(
+            genericVariables: [
+                [key: 'actor', value: '$.repository.owner.name']
+            ],
+            
+            token: 'sampleapp',
+            
+            printContributedVariables: true,
+            printPostContent: false,
+
+            silentResponse: false,
+        )
+    }
     
     stages {
         stage ('Code Checkout'){
@@ -15,10 +30,33 @@ pipeline {
             }
         }
         
-        stage('Stage 2'){
+        stage('Parallel Stages'){
+            parallel {
+                stage('Node Dependecy'){
+                    steps {
+                        sh "npm install"
+                    }
+                }
+                stage('SonarQube'){
+                    environment {
+                        SONAR_SCANNER = tool 'sonarqube-scanner'
+                    }
+                    steps {
+                        withSonarQubeEnv (installationName: 'sonarqube-server') {
+                            sh "$SONAR_SCANNER/bin/sonar-scanner -Dproject.settings=sonar-project.properties"
+                        }
+                    }
+                }
+            }
+        }
+        
+        stage ('Build & Push Image'){
             steps {
-                echo "This is stage 2"
-                echo "The value of the environment is $ENVIRONMENT"
+                sh '''
+                image_tag=`git rev-parse --short HEAD`
+                docker image build -t 131733961504.dkr.ecr.us-east-1.amazonaws.com/sample-app:$image_tag .
+                docker push 131733961504.dkr.ecr.us-east-1.amazonaws.com/sample-app:$image_tag
+                '''
             }
         }
     }
