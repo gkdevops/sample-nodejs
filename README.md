@@ -1,4 +1,4 @@
-# Getting Started ##
+# Getting Started #
 
 These steps will get this sample Node.js application running for you using DigitalOcean App Platform.
 
