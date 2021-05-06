@@ -64,7 +64,7 @@ pipeline {
             steps {
                 sh '''
                 image_tag=`git rev-parse --short HEAD`
-                helm upgrade myapplication ./sampleapp --set image.tag=$image_tag --kubeconfig=kubeconfig
+                helm upgrade example ./helmchart --set image.tag=$image_tag --kubeconfig=kubeconfig
                 '''
             }
         }
