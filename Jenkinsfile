@@ -22,7 +22,14 @@ pipeline {
         )
     }
     
-    stages {       
+    stages {   
+        
+        stage('Initialize Build'){
+            steps {
+                echo "Starting the Build"
+            }
+        }
+        
         stage('Parallel Stages'){
             parallel {
                 stage('Node Dependecy'){
@@ -49,6 +56,15 @@ pipeline {
                 image_tag=`git rev-parse --short HEAD`
                 docker image build -t 131733961504.dkr.ecr.us-east-1.amazonaws.com/sample-app:$image_tag .
                 docker push 131733961504.dkr.ecr.us-east-1.amazonaws.com/sample-app:$image_tag
+                '''
+            }
+        }
+        
+        stage ('Deploy to Kubernetes'){
+            steps {
+                sh '''
+                image_tag=`git rev-parse --short HEAD`
+                helm upgrade myapplication ./sampleapp --set image.tag=$image_tag --kubeconfig=kubeconfig
                 '''
             }
         }
