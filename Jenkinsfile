@@ -50,6 +50,15 @@ pipeline {
             }
         }
         
+        stage ('Regression Testing'){
+            when { 
+                branch 'master'
+            }
+            steps {
+                echo "This is a testing stage"
+            }
+        }
+        
         stage ('Build & Push Image'){
             steps {
                 sh '''
@@ -67,6 +76,6 @@ pipeline {
                 helm upgrade example ./helmchart --set image.tag=$image_tag --kubeconfig=kubeconfig
                 '''
             }
-        }
+        }    
     }
 }
