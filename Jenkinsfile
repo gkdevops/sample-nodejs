@@ -71,10 +71,12 @@ pipeline {
         
         stage ('Deploy to Kubernetes'){
             steps {
-                sh '''
-                image_tag=`git rev-parse --short HEAD`
-                helm upgrade example ./helmchart --set image.tag=$image_tag --kubeconfig=kubeconfig
-                '''
+                withCredentials([string(credentialsId: 'kubeconfig-dev', variable: 'kubeconfig-develop')]) {
+                    sh '''
+                    image_tag=`git rev-parse --short HEAD`
+                    helm upgrade example ./helmchart --set image.tag=$image_tag --kubeconfig=${kubeconfig-develop}
+                    '''
+                }
             }
         }    
     }
