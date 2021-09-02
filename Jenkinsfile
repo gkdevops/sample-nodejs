@@ -1,6 +1,8 @@
 pipeline {
     
-    agent any
+  agent {
+      label 'worker-01'
+  }
     
     parameters {
         choice choices: ['DEV', 'SIT', 'UAT', 'PROD'], description: '', name: 'ENVIRONMENT'
