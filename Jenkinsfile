@@ -77,7 +77,7 @@ pipeline {
             steps {
                 script {
                     timeout(time: 1, unit: 'HOURS') {
-                      input(message: 'Approve Deployment?', ok: 'Yes'    
+                      input message: 'Approve Deployment?', ok: 'Yes'    
                     }
                 }
             }
