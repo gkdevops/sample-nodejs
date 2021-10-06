@@ -75,7 +75,11 @@ pipeline {
                 branch 'main'
             }
             steps {
-                echo "This code block only runs if the branch is main branch"
+                script {
+                    timeout(time: 1, unit: 'HOURS') {
+                      input(message: 'Approve Deployment?', ok: 'Yes'    
+                    }
+                }
             }
         }
   }
