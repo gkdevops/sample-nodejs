@@ -52,23 +52,30 @@ pipeline {
             }
         }
         
-        stage ('Build & Push Image'){
-            steps {
-                sh '''
-                image_tag=`git rev-parse --short HEAD`
-                docker image build -t 131733961504.dkr.ecr.us-east-1.amazonaws.com/sample-app:$image_tag .
-                docker push 131733961504.dkr.ecr.us-east-1.amazonaws.com/sample-app:$image_tag
-                '''
-            }
-        }
-        
-        stage ('Deploy to Kubernetes'){
-            steps {
-                sh '''
-                image_tag=`git rev-parse --short HEAD`
-                helm upgrade myapplication ./sampleapp --set image.tag=$image_tag --kubeconfig=kubeconfig
-                '''
-            }
-        }
+    stage ('Docker Tag and Push'){
+      steps {
+        sh '''
+          tag=`git log --format="%H" -n 1 | cut -c 1-7`
+          sudo docker image tag mycounterapp:${tag}${BUILD_ID} chgoutam/mycounterapp:${tag}${BUILD_ID}
+          sudo docker image push chgoutam/mycounterapp:${tag}${BUILD_ID}
+        '''
+      }
     }
+        stage('deploy to development'){
+            when {
+                branch 'develop'
+            }
+            steps {
+                echo "This code block only runs if the branch is develop"
+            }
+        }
+        stage('deploy to production'){
+            when {
+                branch 'main'
+            }
+            steps {
+                echo "This code block only runs if the branch is main branch"
+            }
+        }
+  }
 }
