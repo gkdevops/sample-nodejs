@@ -62,12 +62,16 @@ pipeline {
         '''
       }
     }
-        stage('deploy to development'){
+        stage('deploy to develop'){
             when {
                 branch 'develop'
             }
             steps {
-                echo "This code block only runs if the branch is develop"
+                script {
+                    timeout(time: 1, unit: 'HOURS') {
+                      input message: 'Approve Deployment?', ok: 'Yes'    
+                    }
+                }
             }
         }
         stage('deploy to production'){
@@ -75,10 +79,8 @@ pipeline {
                 branch 'main'
             }
             steps {
-                script {
-                    timeout(time: 1, unit: 'HOURS') {
-                      input message: 'Approve Deployment?', ok: 'Yes'    
-                    }
+                withCredentials([file(credentialsId: 'kubernetes-dev-cluster', variable: 'kubeconfig')]) {
+                    sh "kubectl get pods --kubeconfig=${kubeconfig}"
                 }
             }
         }
