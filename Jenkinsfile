@@ -75,19 +75,16 @@ pipeline {
             }
         }
         
-        stage('Update the Helm Chart Tag Value'){
-            steps {
-                sh "echo updating the image tag value in the Helm chart, which will be applied on kubernetes cluster"
-                sh "sed 's///g"
-            }
-        }
         stage('deploy to production'){
             when {
                 branch 'main'
             }
             steps {
                 withCredentials([file(credentialsId: 'kubernetes-dev-cluster', variable: 'kubeconfig')]) {
-                    sh "helm install --upgrade nginx ./helmchart"
+                    sh '''
+                    tag=`git log --format="%H" -n 1 | cut -c 1-7`
+                    helm install --upgrade --set image.tag=${tag}${BUILD_ID} counter-app ./helmchart
+                    '''
                 }
             }
         }
