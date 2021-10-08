@@ -16,7 +16,7 @@ spec:
       - name: counter-app-container
         image: chgoutam/mycounterapp:1.16.1
         ports:
-        - containerPort: 80
+        - containerPort: 3000
         resources:         
           limits:          
             cpu: 50m        
