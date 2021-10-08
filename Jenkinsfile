@@ -96,12 +96,13 @@ pipeline {
                 sh "kubectl wait --for=condition=ready pod -l app=sampleapp --timeout=30s"
             }
 	        post {
-		       success {
-                 echo 'This logic will get exeucted when the above stage is successful'
-               }
-		       failure {
-                 echo 'This logic will get exeucted when the above stage is failed'
-               }
+		  success {
+                    echo 'This logic will get exeucted when the above stage is successful'
+                  }
+		  failure {
+                    	echo 'This logic will get exeucted when the above stage is failed'
+			sh "helm rollback counter-app 0"
+                  }
 	       }
       }
   }
