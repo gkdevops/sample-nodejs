@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: 131733961504.dkr.ecr.us-east-1.amazonaws.com/sample-app
+  repository: chgoutam/mycounterapp
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: 1.16.1
