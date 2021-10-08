@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: counter-app
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: counter-app
+  template:
+    metadata:
+      labels:
+        app: counter-app
+    spec:
+      containers:
+      - name: counter-app-container
+        image: chgoutam/mycounterapp:1.16.1
+        ports:
+        - containerPort: 80
+        resources:         
+          limits:          
+            cpu: 50m        
+            memory: "100Mi"
