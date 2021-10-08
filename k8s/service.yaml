@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:  
+  name: nodeport-service
+spec:
+  selector:    
+    app: counter-app
+  type: NodePort
+  ports:  
+  - name: http
+    port: 80
+    targetPort: 3000
+    nodePort: 31000
+    protocol: TCP
