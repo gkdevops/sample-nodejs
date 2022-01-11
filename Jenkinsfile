@@ -58,6 +58,19 @@ pipeline {
                 echo "This is a testing stage"
             }
         }
+      
+        stage('deploy to develop'){
+            when {
+                branch 'develop'
+            }
+            steps {
+                script {
+                    timeout(time: 1, unit: 'HOURS') {
+                      input message: 'Approve Deployment?', ok: 'Yes'    
+                    }
+                }
+            }
+        }
         
         stage ('Build & Push Image'){
             steps {
