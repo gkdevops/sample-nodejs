@@ -101,6 +101,13 @@ pipeline {
                 branch 'main'
             }
             steps {
+                withCredentials([file(credentialsId: 'kubernetes-dev-cluster', variable: 'kubeconfig')]) {
+                    sh '''
+		    kubectl wait --for=condition=ready pod -l app=sampleapp --timeout=30s --kubeconfig=${kubeconfig}
+                    '''
+                }
+            }
+            steps {
                 sh "kubectl wait --for=condition=ready pod -l app=sampleapp --timeout=30s"
             }
 	        post {
@@ -109,7 +116,6 @@ pipeline {
                   }
 		  failure {
                     	echo 'This logic will get exeucted when the above stage is failed'
-			sh "helm rollback counter-app 0"
                   }
 	       }
       }
