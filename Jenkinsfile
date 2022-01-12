@@ -60,6 +60,14 @@ pipeline {
         '''
       }
     }
+
+    stage ('Docker Image Scan'){
+      steps {
+        sh '''
+	  trivy --timeout 10m --exit-code 1  --severity "MEDIUM,HIGH,CRITICAL" mycounterapp:${tag}${BUILD_ID}
+        '''
+      }
+    }
         stage('deploy to develop'){
             when {
                 branch 'develop'
