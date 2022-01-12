@@ -65,11 +65,12 @@ pipeline {
       steps {
         sh '''
 	  tag=`git log --format="%H" -n 1 | cut -c 1-7`
-	  trivy --timeout 10m --exit-code 1  --severity "MEDIUM,HIGH,CRITICAL" mycounterapp:${tag}${BUILD_ID}
+	  #trivy --timeout 10m --exit-code 1  --severity "MEDIUM,HIGH,CRITICAL" mycounterapp:${tag}${BUILD_ID}
+	  trivy --timeout 10m --severity "MEDIUM,HIGH,CRITICAL" mycounterapp:${tag}${BUILD_ID}
         '''
       }
     }
-        stage('deploy to develop'){
+        stage('deploy to develop environment'){
             when {
                 branch 'develop'
             }
@@ -82,7 +83,7 @@ pipeline {
             }
         }
         
-        stage('deploy to production'){
+        stage('deploy to production environment'){
             when {
                 branch 'main'
             }
