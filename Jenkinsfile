@@ -64,6 +64,7 @@ pipeline {
     stage ('Docker Image Scan'){
       steps {
         sh '''
+	  tag=`git log --format="%H" -n 1 | cut -c 1-7`
 	  trivy --timeout 10m --exit-code 1  --severity "MEDIUM,HIGH,CRITICAL" mycounterapp:${tag}${BUILD_ID}
         '''
       }
