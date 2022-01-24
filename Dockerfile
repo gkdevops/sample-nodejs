@@ -1,9 +1,15 @@
-FROM node:14-alpine
+FROM node:16-alpine
 
-WORKDIR /opt/apps
+MAINTAINER goutham kumar <example@gmail.com>
+
+EXPOSE 3000
+
+LABEL company_name="DLT Labs"
+
+WORKDIR /opt
 
 COPY . .
 
-EXPOSE 3000
+RUN npm install
 
 CMD ["node", "./bin/www"]
