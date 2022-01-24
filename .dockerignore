@@ -1,0 +1,7 @@
+Dockerfile
+k8s/
+helmchart/
+Jenkinsfile
+kubeconfig
+README.md
+sonar-project.properties
