@@ -14,10 +14,23 @@ pipeline {
     parallelsAlwaysFailFast()
   }
 
-  triggers {
-    cron '00 10 * * *'
-  }
 
+    triggers {
+        GenericTrigger(
+            genericVariables: [
+                [key: 'actor', value: '$.repository.owner.name'],
+                [key: 'branch', value: '$.ref']
+            ],
+            token: 'sampleapp',
+            printContributedVariables: true,
+            printPostContent: false,
+            silentResponse: false,
+            regexpFilterText: '$branch',
+            regexpFilterExpression: 'refs/heads/' + BRANCH_NAME
+
+        )
+    }
+	
   environment {
     SONAR_SCANNER = tool 'sonarqube-scanner'
   }
