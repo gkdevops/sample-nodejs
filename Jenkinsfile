@@ -4,6 +4,7 @@ pipeline {
     
     parameters {
         choice choices: ['DEV', 'SIT', 'UAT', 'PROD'], description: '', name: 'ENVIRONMENT'
+        string defaultValue: 'main', description: 'Branch name used to download the code from', name: 'BRANCH_NAME'
     }
 
     triggers {
@@ -24,6 +25,12 @@ pipeline {
     
     stages {   
         
+        stage('code checkout') {
+            steps {
+                git branch: '$BRANCH_NAME', credentialsId: 'github-credentials', url: 'https://github.com/gkdevops/sample-nodejs.git'
+            }
+        }
+
         stage('Initialize Build'){
             steps {
                 echo "Starting the Build"
@@ -65,8 +72,8 @@ pipeline {
       steps {
         sh '''
 	  tag=`git log --format="%H" -n 1 | cut -c 1-7`
-	  trivy --timeout 10m --exit-code 0  --severity "MEDIUM,HIGH,CRITICAL" mynodejs:${tag}${BUILD_ID}
-	  #trivy --timeout 10m mynodejs:${tag}${BUILD_ID}
+	  #trivy --timeout 10m --exit-code 1  --severity "MEDIUM,HIGH,CRITICAL" mynodejs:${tag}${BUILD_ID}
+	  trivy --timeout 10m --severity "MEDIUM,HIGH,CRITICAL" mynodejs:${tag}${BUILD_ID}
         '''
       }
     }
