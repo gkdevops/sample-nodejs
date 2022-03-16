@@ -6,22 +6,6 @@ pipeline {
         choice choices: ['DEV', 'SIT', 'UAT', 'PROD'], description: '', name: 'ENVIRONMENT'
         string defaultValue: 'main', description: 'Branch name used to download the code from', name: 'BRANCH_NAME'
     }
-
-    triggers {
-        GenericTrigger(
-            genericVariables: [
-                [key: 'actor', value: '$.repository.owner.name'],
-                [key: 'branch', value: '$.ref']
-            ],
-            token: 'sampleapp',
-            printContributedVariables: true,
-            printPostContent: false,
-            silentResponse: false,
-            regexpFilterText: '$branch',
-            regexpFilterExpression: 'refs/heads/' + BRANCH_NAME
-
-        )
-    }
     
     stages {   
         
