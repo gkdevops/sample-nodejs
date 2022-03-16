@@ -61,5 +61,17 @@ pipeline {
         '''
       }
     }
+    stage('deploy to develop environment'){
+    	when {
+            branch 'develop'
+        }
+        steps {
+            script {
+                timeout(time: 10, unit: 'HOURS') {
+                    input message: 'Approve Deployment?', ok: 'Yes'    
+                 }
+             }
+         }
+      }
   }
 }
