@@ -1,6 +1,6 @@
 #This file will create a nodejs image
 
-FROM node:16.14
+FROM node:16-alpine
 
 MAINTAINER Goutham Kumar <chgoutam@test.com>
 
