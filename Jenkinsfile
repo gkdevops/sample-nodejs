@@ -61,14 +61,14 @@ pipeline {
         '''
       }
     }
-    stage('deploy to develop environment'){
+    stage('Aproval for main branch'){
     	when {
-            branch 'develop'
+            branch 'main'
         }
         steps {
             script {
                 timeout(time: 10, unit: 'HOURS') {
-                    input message: 'Approve Deployment?', ok: 'Yes'    
+                    input message: 'Approve Deployment?', ok: 'Yes' 
                  }
              }
          }
