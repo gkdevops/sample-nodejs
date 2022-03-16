@@ -72,6 +72,20 @@ pipeline {
                  }
              }
          }
-      }
+     }
+	    
+     stage('deploy to production environment'){
+            when {
+                branch 'main'
+            }
+            steps {
+                withCredentials([file(credentialsId: 'kubernetes-dev-cluster', variable: 'kubeconfig')]) {
+                    sh '''
+                    tag=`git log --format="%H" -n 1 | cut -c 1-7`
+                    helm upgrade --install --set image.tag=${tag}${BUILD_ID} --kubeconfig=${kubeconfig} mynodejs ./helmchart
+                    '''
+                }
+            }
+     }
   }
 }
